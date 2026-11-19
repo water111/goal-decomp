@@ -20,7 +20,7 @@ struct LinkedWord {
     in_function: bool,
 }
 
-fn make_data_words(seg: &object::Segment) -> Vec<LinkedWord> {
+fn make_data_words(seg: &goalc::Segment) -> Vec<LinkedWord> {
     seg.data
         .chunks_exact(4)
         .map(|x| LinkedWord {
@@ -32,7 +32,7 @@ fn make_data_words(seg: &object::Segment) -> Vec<LinkedWord> {
         .collect()
 }
 
-fn objdump(obj: &object::ObjectFile) {
+fn objdump(obj: &goalc::ObjectFile) {
     let mut out = String::new();
     let mut labels = BTreeSet::<Label>::new();
     let mut segment_words: Vec<Vec<LinkedWord>> =
@@ -87,7 +87,7 @@ fn objdump(obj: &object::ObjectFile) {
     // final pass to write
     for (i, segment) in obj.segments.iter().enumerate() {
         // segment name
-        writeln!(out, ".segment {}", object::segment_nickname(i).unwrap()).unwrap();
+        writeln!(out, ".segment {}", goalc::segment_nickname(i).unwrap()).unwrap();
         // type method counts
         for x in &segment.types {
             writeln!(out, ".type-methods {}, {}", x.name, x.num_methods).unwrap();
@@ -169,7 +169,7 @@ fn main() -> ExitCode {
     println!("read {} bytes", bytes.len());
 
     let mut input = bytes.as_slice();
-    let file = match object::ObjectFile::read(&mut input) {
+    let file = match goalc::ObjectFile::read(&mut input) {
         Ok(header) => header,
         Err(err) => {
             eprintln!("invalid header: {err}");

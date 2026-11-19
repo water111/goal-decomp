@@ -1,4 +1,7 @@
-[workspace]
-members = ["crates/object"
-]
-resolver = "3"
+[package]
+name = "goalc"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
